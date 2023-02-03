@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .btn{
+            color:aliceblue; 
+            background-color: green; 
+            border: none;
+            height: 30px;
+            padding-left: 5px;
+            padding-right: 5px; 
+            font-weight: bolder;
+        }
+        .btn:hover{
+            transform: scale(1.05,1.05);
+        }
+        .input-label{
+            width: 80px;display: block; margin-left: 40%;
+        }
+        .result{
+            font-weight: bold;
+            color: blue;
+            height: 50px;
+            background-color: azure;
+            padding-top: 20px;
+            width: 60%;
+            margin-left: 20%;
+        }
+        .container{
+            width:40%; 
+            background-color: bisque; 
+            padding-top: 10px;
+            padding-bottom: 20px;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-left: 30%; 
+            margin-right: 30%;
+            margin-top: 200px; 
+            text-align: center;
+            box-shadow: 20px 20px 30px 10px;
+        }
+    </style>
+  <script>
+    function makeApiCall() {
+    
+      var input1 = document.getElementById("input1").value;
+      var input2 = document.getElementById("input2").value;
+      var input3 = document.getElementById("input3").value;
+
+      fetch("http://127.0.0.1:3000/predict", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ age: input1, number: input2, start: input3 })
+      })
+        .then(response => response.json())
+        .then(data => {
+          // Update the result display
+          document.getElementById("result").innerHTML = data.result=='1'?"Present":"Absent";
+        })
+        .catch(error => {
+          // Show an error message
+          document.getElementById("result").innerHTML = "Error: " + error;
+        });
+    }
+  </script>
+  <title>Kyphosis Disease Prediction</title>
+</head>
+<body style="background-color: antiquewhite;">
+  <div class="container">
+    <h2><strong>Kyphosis Disease Prediction</strong></h2>
+
+  <label for="input1" class="input-label"><strong>Age:</strong></label>
+  <input type="number" id="input1"><br><br>
+
+  <label for="input2" class="input-label"><strong>Number:</strong></label>
+  <input type="number" id="input2"><br><br>
+
+  <label for="input3" class="input-label"><strong>Start:</strong></label>
+  <input type="number" id="input3"><br><br>
+
+  <button onclick="makeApiCall()" class="btn">Predict</button><br><br>
+
+  <h3>Result:</h3>
+  <div id="result" class="result"></div>
+  </div>
+</body>
+</html>
